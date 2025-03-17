@@ -1,0 +1,6 @@
+queries:
+  - exclude:
+      - name: Insecure randomness
+        reason: Ignored in test files
+        paths:
+          - 'tests/**'
