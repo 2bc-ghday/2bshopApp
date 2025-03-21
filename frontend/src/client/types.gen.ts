@@ -219,3 +219,26 @@ export type UtilsTestEmailData = {
 export type UtilsTestEmailResponse = Message
 
 export type UtilsHealthCheckResponse = boolean
+
+export type PlatformCreatePlatformData = {
+  requestBody: PlatformCreate
+}
+
+export type PlatformCreate = {
+  name: string
+}
+
+export type PlatformCreateResponse = {
+  id: string
+  name: string
+}
+
+export type PlatformsReadPlatformsData = {
+  skip?: number
+  limit?: number
+}
+
+export type PlatformsReadPlatformsResponse = {
+  data: Array<PlatformCreateResponse>
+  count: number
+}

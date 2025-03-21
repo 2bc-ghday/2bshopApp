@@ -44,6 +44,10 @@ import type {
   UtilsTestEmailData,
   UtilsTestEmailResponse,
   UtilsHealthCheckResponse,
+  PlatformCreatePlatformData,
+  PlatformCreateResponse,
+  PlatformsReadPlatformsData,
+  PlatformsReadPlatformsResponse,
 } from "./types.gen"
 
 export class ItemsService {
@@ -518,6 +522,55 @@ export class UtilsService {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/utils/health-check/",
+    })
+  }
+}
+
+export class PlatformsService {
+  /**
+   * Create Platform
+   * Create new platform.
+   * @param data The data for the request.
+   * @param data.requestBody
+   * @returns PlatformCreateResponse Successful Response
+   * @throws ApiError
+   */
+  public static createPlatform(
+    data: PlatformCreatePlatformData,
+  ): CancelablePromise<PlatformCreateResponse> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/platforms/",
+      body: data.requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: "Validation Error",
+      },
+    })
+  }
+
+  /**
+   * Read Platforms
+   * Retrieve platforms.
+   * @param data The data for the request.
+   * @param data.skip
+   * @param data.limit
+   * @returns PlatformsReadPlatformsResponse Successful Response
+   * @throws ApiError
+   */
+  public static readPlatforms(
+    data: PlatformsReadPlatformsData = {},
+  ): CancelablePromise<PlatformsReadPlatformsResponse> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/platforms/",
+      query: {
+        skip: data.skip,
+        limit: data.limit,
+      },
+      errors: {
+        422: "Validation Error",
+      },
     })
   }
 }
