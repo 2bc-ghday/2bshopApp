@@ -69,6 +69,5 @@ def test_list_platforms(client: TestClient, superuser_token_headers: dict[str, s
     )
     assert response.status_code == 200
     content = response.json()
-    print (content)
     assert len(content["data"]) > 0
     assert any(p["id"] == platform.id for p in content["data"])
