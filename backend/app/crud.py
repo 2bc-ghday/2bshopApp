@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, Platform, PlatformCreate, PlatformUpdate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -52,3 +52,37 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+def create_platform(*, session: Session, platform_create: PlatformCreate) -> Platform:
+    db_platform = Platform.model_validate(platform_create)
+    session.add(db_platform)
+    session.commit()
+    session.refresh(db_platform)
+    return db_platform
+
+
+def update_platform(*, session: Session, platform_id: int, platform_update: PlatformUpdate) -> Platform:
+    db_platform = session.get(Platform, platform_id)
+    if not db_platform:
+        raise ValueError("Platform not found")
+    update_data = platform_update.model_dump(exclude_unset=True)
+    db_platform.sqlmodel_update(update_data)
+    session.add(db_platform)
+    session.commit()
+    session.refresh(db_platform)
+    return db_platform
+
+
+def delete_platform(*, session: Session, platform_id: int) -> None:
+    db_platform = session.get(Platform, platform_id)
+    if not db_platform:
+        raise ValueError("Platform not found")
+    session.delete(db_platform)
+    session.commit()
+
+
+def list_platforms(*, session: Session) -> list[Platform]:
+    statement = select(Platform)
+    platforms = session.exec(statement).all()
+    return platforms

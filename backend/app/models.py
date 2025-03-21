@@ -112,3 +112,29 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
+
+
+class PlatformBase(SQLModel):
+    name: str = Field(max_length=255)
+
+
+class PlatformCreate(PlatformBase):
+    pass
+
+
+class PlatformUpdate(PlatformBase):
+    name: str | None = Field(default=None, max_length=255)
+
+
+class Platform(PlatformBase, table=True):
+    id: int = Field(primary_key=True)
+    name: str = Field(max_length=255)
+
+
+class PlatformPublic(PlatformBase):
+    id: int
+
+
+class PlatformsPublic(SQLModel):
+    data: list[PlatformPublic]
+    count: int
