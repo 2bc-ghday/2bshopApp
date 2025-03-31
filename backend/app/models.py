@@ -112,3 +112,20 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
+
+
+# Compliance model
+class Compliance(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str = Field(max_length=255, unique=True, index=True)
+
+class ComplianceBase(SQLModel):
+    name: str
+
+# Properties to return via API, id is always required
+class CompliancePublic(ComplianceBase):
+    id: uuid.UUID
+
+class CompliancesPublic(SQLModel):
+    data: list[CompliancePublic]
+    count: int

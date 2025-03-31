@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, Compliance, CompliancesPublic
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -52,3 +52,25 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     session.commit()
     session.refresh(db_item)
     return db_item
+
+
+# Compliance CRUD operations
+def create_compliance(*, session: Session, name: str) -> Compliance:
+    db_compliance = Compliance(name=name)
+    session.add(db_compliance)
+    session.commit()
+    session.refresh(db_compliance)
+    return db_compliance
+
+
+def delete_compliance(*, session: Session, compliance_id: uuid.UUID) -> None:
+    compliance = session.get(Compliance, compliance_id)
+    if compliance:
+        session.delete(compliance)
+        session.commit()
+
+
+def list_compliances(*, session: Session) -> CompliancesPublic:
+    statement = select(Compliance)
+    compliances = session.exec(statement).all()
+    return CompliancesPublic(data=compliances, count=len(compliances))

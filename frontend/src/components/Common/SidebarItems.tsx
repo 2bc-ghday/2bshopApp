@@ -11,6 +11,7 @@ const items = [
   { icon: FiBriefcase, title: "Items", path: "/items" },
   { icon: FiSettings, title: "User Settings", path: "/settings" },
   { icon: FiSliders, title: "Campaigns", path: "/campaigns" },
+  { icon: FiActivity, title: "Compliance", path: "/compliance" },
   { icon: FiActivity, title: "Analytics", path: "/settings" },
   { icon: FiUser, title: "Customers", path: "/settings" },
   { icon: FiShoppingBag, title: "Orders", path: "/settings" },

@@ -219,3 +219,19 @@ export type UtilsTestEmailData = {
 export type UtilsTestEmailResponse = Message
 
 export type UtilsHealthCheckResponse = boolean
+
+export type Compliance = {
+  id: string;
+  name: string;
+  status: string;
+};
+
+export type ComplianceList = {
+  data: Array<Compliance>;
+  count: number;
+};
+
+export type ComplianceCreate = {
+  name: string;
+  status: string;
+};

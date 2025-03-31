@@ -45,6 +45,7 @@ import type {
   UtilsTestEmailResponse,
   UtilsHealthCheckResponse,
 } from "./types.gen"
+import type { Compliance, ComplianceList, ComplianceCreate } from "./types.gen";
 
 export class ItemsService {
   /**
@@ -519,5 +520,38 @@ export class UtilsService {
       method: "GET",
       url: "/api/v1/utils/health-check/",
     })
+  }
+}
+
+export class ComplianceService {
+  /**
+   * Get all compliances
+   * Retrieve a list of compliances.
+   * @returns ComplianceList Successful Response
+   * @throws ApiError
+   */
+  public static getCompliances(): CancelablePromise<ComplianceList> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/compliances/",
+    });
+  }
+
+  /**
+   * Create a compliance
+   * Create a new compliance.
+   * @param data The data for the request.
+   * @returns Compliance Successful Response
+   * @throws ApiError
+   */
+  public static createCompliance(
+    data: ComplianceCreate
+  ): CancelablePromise<Compliance> {
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/compliances/",
+      body: data,
+      mediaType: "application/json",
+    });
   }
 }
