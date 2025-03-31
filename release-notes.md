@@ -35,7 +35,7 @@
 * ♻️ Remove modify id script in favor of openapi-ts config. PR [#1434](https://github.com/fastapi/full-stack-fastapi-template/pull/1434) by [@patrick91](https://github.com/patrick91).
 * 👷 Improve Playwright CI speed: sharding (parallel runs), run in Docker to use cache, use env vars. PR [#1405](https://github.com/fastapi/full-stack-fastapi-template/pull/1405) by [@tiangolo](https://github.com/tiangolo).
 * ♻️ Add PaginationFooter component. PR [#1381](https://github.com/fastapi/full-stack-fastapi-template/pull/1381) by [@saltie2193](https://github.com/saltie2193).
-* ♻️ Refactored code to use encryption algorithm name from settings for consistency. PR [#1160](https://github.com/fastapi/full-stack-fastapi-template/pull/1160) by [@sameeramin](https://github.com/sameeramin).
+* ♻️ Refactored code to use encryption algorithm name from settings for consistency. PR [#1160](https://github.com/fastapi/full-stack-fastapi-template/pull/1160) by [@sameeramin](https://github.com/tiangolo).
 * 🔊 Enable logging for email utils by default. PR [#1374](https://github.com/fastapi/full-stack-fastapi-template/pull/1374) by [@ihmily](https://github.com/ihmily).
 * 🔧 Add `ENV PYTHONUNBUFFERED=1` to log output directly to Docker. PR [#1378](https://github.com/fastapi/full-stack-fastapi-template/pull/1378) by [@tiangolo](https://github.com/tiangolo).
 * 💡 Remove unnecessary comment. PR [#1260](https://github.com/fastapi/full-stack-fastapi-template/pull/1260) by [@sebhani](https://github.com/sebhani).
@@ -67,7 +67,7 @@
 * ⬆ Bump astral-sh/setup-uv from 2 to 3. PR [#1364](https://github.com/fastapi/full-stack-fastapi-template/pull/1364) by [@dependabot[bot]](https://github.com/apps/dependabot).
 *  👷 Update pre-commit end-of-file-fixer hook to exclude email-templates. PR [#1296](https://github.com/fastapi/full-stack-fastapi-template/pull/1296) by [@goabonga](https://github.com/goabonga).
 * ⬆ Bump tiangolo/issue-manager from 0.5.0 to 0.5.1. PR [#1332](https://github.com/fastapi/full-stack-fastapi-template/pull/1332) by [@dependabot[bot]](https://github.com/apps/dependabot).
-* 🔧 Run task by the same Python environment used to run Copier. PR [#1157](https://github.com/fastapi/full-stack-fastapi-template/pull/1157) by [@waketzheng](https://github.com/waketzheng).
+* 🔧 Run task by the same Python environment used to run Copier. PR [#1157](https://github.com/fastapi/full-stack-fastapi-template/pull/1157) by [@waketzheng](https://github.com/tiangolo).
 * 👷 Tweak generate client to error out if there are errors. PR [#1377](https://github.com/fastapi/full-stack-fastapi-template/pull/1377) by [@tiangolo](https://github.com/tiangolo).
 * 👷 Generate and commit client only on same repo PRs, on forks, show the error. PR [#1376](https://github.com/fastapi/full-stack-fastapi-template/pull/1376) by [@tiangolo](https://github.com/tiangolo).
 
@@ -164,7 +164,7 @@ Lots of new things! 🎁
 
 ### Fixes
 
-* 🐛 Fix welcome page to show logged-in user. PR [#1218](https://github.com/tiangolo/full-stack-fastapi-template/pull/1218) by [@tomerb](https://github.com/tomerb).
+* 🐛 Fix welcome page to show logged-in user. PR [#1218](https://github.com/tiangolo/full-stack-fastapi-template/pull/1218) by [@tomerb](https://github.com/tiangolo).
 * 🐛 Fix local Traefik proxy network config to fix Gateway Timeouts. PR [#1184](https://github.com/tiangolo/full-stack-fastapi-template/pull/1184) by [@JoelGotsch](https://github.com/JoelGotsch).
 * ♻️ Fix tests when first superuser password is changed in .env. PR [#1165](https://github.com/tiangolo/full-stack-fastapi-template/pull/1165) by [@billzhong](https://github.com/billzhong).
 * 🐛 Fix bug when resetting password. PR [#1171](https://github.com/tiangolo/full-stack-fastapi-template/pull/1171) by [@alejsdev](https://github.com/alejsdev).
@@ -268,10 +268,10 @@ Lots of new things! 🎁
 * 🔧 Update Node.js version in `.nvmrc`. PR [#1192](https://github.com/tiangolo/full-stack-fastapi-template/pull/1192) by [@alejsdev](https://github.com/alejsdev).
 * 🔥 Remove ESLint and Prettier from pre-commit config. PR [#1096](https://github.com/tiangolo/full-stack-fastapi-template/pull/1096) by [@alejsdev](https://github.com/alejsdev).
 * 🔧 Update mypy config to ignore .venv directories. PR [#1155](https://github.com/tiangolo/full-stack-fastapi-template/pull/1155) by [@tiangolo](https://github.com/tiangolo).
-* 🚨 Enable `ARG001` to prevent unused arguments. PR [#1152](https://github.com/tiangolo/full-stack-fastapi-template/pull/1152) by [@patrick91](https://github.com/patrick91).
-* 🔥 Remove isort configuration, since we use Ruff now. PR [#1144](https://github.com/tiangolo/full-stack-fastapi-template/pull/1144) by [@patrick91](https://github.com/patrick91).
+* 🚨 Enable `ARG001` to prevent unused arguments. PR [#1152](https://github.com/tiangolo/full-stack-fastapi-template/pull/1152) by [@patrick91](https://github.com/tiangolo).
+* 🔥 Remove isort configuration, since we use Ruff now. PR [#1144](https://github.com/tiangolo/full-stack-fastapi-template/pull/1144) by [@patrick91](https://github.com/tiangolo).
 * 🔧 Update pre-commit config to exclude generated client folder. PR [#1150](https://github.com/tiangolo/full-stack-fastapi-template/pull/1150) by [@alejsdev](https://github.com/alejsdev).
-* 🔧 Change `.nvmrc` format. PR [#1148](https://github.com/tiangolo/full-stack-fastapi-template/pull/1148) by [@patrick91](https://github.com/patrick91).
+* 🔧 Change `.nvmrc` format. PR [#1148](https://github.com/tiangolo/full-stack-fastapi-template/pull/1148) by [@patrick91](https://github.com/alejsdev).
 * 🎨 Ignore alembic from ruff lint and format. PR [#1131](https://github.com/tiangolo/full-stack-fastapi-template/pull/1131) by [@estebanx64](https://github.com/estebanx64).
 * 🔧 Add GitHub templates for discussions and issues, and security policy. PR [#1105](https://github.com/tiangolo/full-stack-fastapi-template/pull/1105) by [@alejsdev](https://github.com/alejsdev).
 * ⬆ Bump dawidd6/action-download-artifact from 3.1.2 to 3.1.4. PR [#1103](https://github.com/tiangolo/full-stack-fastapi-template/pull/1103) by [@dependabot[bot]](https://github.com/apps/dependabot).
@@ -459,7 +459,7 @@ Test cov > 90% ✅
 * 👷 Fix latest-changes GitHub Action token, strike 2. PR [#546](https://github.com/tiangolo/full-stack-fastapi-template/pull/546) by [@tiangolo](https://github.com/tiangolo).
 * 👷 Fix latest-changes GitHub Action token config. PR [#545](https://github.com/tiangolo/full-stack-fastapi-template/pull/545) by [@tiangolo](https://github.com/tiangolo).
 * 👷 Add latest-changes GitHub Action. PR [#544](https://github.com/tiangolo/full-stack-fastapi-template/pull/544) by [@tiangolo](https://github.com/tiangolo).
-* Update issue-manager. PR [#211](https://github.com/tiangolo/full-stack-fastapi-template/pull/211).
+* Update issue-manager. PR [#211](https://github.com/tiangolo/full-stack-fastapi-template/pull/211) by [@tiangolo](https://github.com/tiangolo).
 * Add [GitHub Sponsors](https://github.com/sponsors/tiangolo) button. PR [#201](https://github.com/tiangolo/full-stack-fastapi-template/pull/201).
 * Simplify scripts and development, update docs and configs. PR [#155](https://github.com/tiangolo/full-stack-fastapi-template/pull/155).
 
