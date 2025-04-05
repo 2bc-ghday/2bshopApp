@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-pvc
+  labels:
+    io.kompose.service: app-db-data-pvc
+  name: app-db-data-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi

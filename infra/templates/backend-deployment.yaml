@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: backend
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: backend
+  template:
+    metadata:
+      labels:
+        io.kompose.service: backend
+    spec:
+      env: &sharedEnvVars
+        - name: DOMAIN
+          value: {{ .Values.environment.DOMAIN }}
+        - name: FRONTEND_HOST
+          value: {{ .Values.environment.FRONTEND_HOST }}
+        - name: ENVIRONMENT
+          value: {{ .Values.environment.ENVIRONMENT }}
+        - name: BACKEND_CORS_ORIGINS
+          value: {{ .Values.environment.BACKEND_CORS_ORIGINS }}
+        - name: SECRET_KEY
+          value: {{ .Values.environment.SECRET_KEY }}
+        - name: FIRST_SUPERUSER
+          value: {{ .Values.environment.FIRST_SUPERUSER }}
+        - name: FIRST_SUPERUSER_PASSWORD
+          value: {{ .Values.environment.FIRST_SUPERUSER_PASSWORD }}
+        - name: POSTGRES_SERVER
+          value: {{ .Values.environment.POSTGRES_SERVER }}
+        - name: POSTGRES_PORT
+          value: "{{ .Values.environment.POSTGRES_PORT }}"
+        - name: POSTGRES_DB
+          value: {{ .Values.environment.POSTGRES_DB }}
+        - name: POSTGRES_USER
+          value: {{ .Values.environment.POSTGRES_USER }}
+        - name: POSTGRES_PASSWORD
+          value: {{ .Values.environment.POSTGRES_PASSWORD }}
+        - name: VITE_API_URL
+          value: {{ .Values.environment.VITE_API_URL }}
+        - name: NODE_ENV
+          value: {{ .Values.environment.NODE_ENV }}
+        - name: PROJECT_NAME
+          value: {{ .Values.environment.PROJECT_NAME }}
+
+      initContainers:
+        - name: wait-for-db
+          image: busybox
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              until nc -z {{ .Values.environment.POSTGRES_SERVER }} {{ .Values.environment.POSTGRES_PORT }}; do
+                echo "Waiting for database to be ready...";
+                sleep 2;
+              done;
+              echo "Database is ready!";
+        - name: run-prestart
+          image: {{ .Values.image.backend }}
+          args:
+          - bash
+          - scripts/prestart.sh
+          env: *sharedEnvVars
+
+      containers:
+        - image: {{ .Values.image.backend }}
+          name: backend
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost:8000/api/v1/utils/health-check/
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost:8000/api/v1/utils/health-check/
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 3
+          env: *sharedEnvVars
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+      restartPolicy: Always

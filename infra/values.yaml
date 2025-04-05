@@ -1,0 +1,46 @@
+# Default values for the 2bshop Helm chart
+replicaCount: 1
+
+image:
+  backend: "backend:latest"
+  frontend: "frontend:latest"
+  db: "postgres:12"
+
+environment:
+  DOMAIN: "localhost"
+  FRONTEND_HOST: "http://localhost:5173"
+  ENVIRONMENT: "local"
+  BACKEND_CORS_ORIGINS: "http://localhost,http://localhost:5173,https://localhost,https://localhost:5173"
+  SECRET_KEY: "changethis"
+  FIRST_SUPERUSER: "admin@example.com"
+  FIRST_SUPERUSER_PASSWORD: "changethis"
+  POSTGRES_SERVER: "db"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "app"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "changethis"
+  VITE_API_URL: "http://localhost:8000"
+  NODE_ENV: "production"
+  PROJECT_NAME: "Acme Inc."
+  PGDATA: "/var/lib/postgresql/data/pgdata"
+
+resources:
+  backend: {}
+  frontend: {}
+  db: {}
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: ""
+
+service:
+  backend:
+    type: ClusterIP
+    port: "8000"
+  frontend:
+    type: ClusterIP
+    port: "80"
+  db:
+    type: ClusterIP
+    port: "5432"
