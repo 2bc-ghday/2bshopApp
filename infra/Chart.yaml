@@ -1,9 +1,0 @@
-name: 2bshops
-description: A generated Helm Chart from Skippbox Kompose
-version: 0.0.1
-apiVersion: v2
-keywords:
-  - ./infra/
-sources: []
-home: "https://2bshops.com"
-icon: https://2bshops.com/icon.png

@@ -1,0 +1,16 @@
+apiVersion: v2
+name: 2bshop
+description: Umbrella chart for 2bshop application
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+  - name: frontend
+    version: 0.1.0
+    repository: "file://../frontend"
+  - name: backend
+    version: 0.1.0
+    repository: "file://../backend"
+  - name: postgresql
+    version: "16.6.3"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
