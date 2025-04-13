@@ -1,6 +1,6 @@
 apiVersion: v2
-name: 2bshop
-description: Umbrella chart for 2bshop application
+name: app2bshops
+description: Umbrella chart for 2bshops application
 version: 0.1.0
 appVersion: "1.0.0"
 dependencies:

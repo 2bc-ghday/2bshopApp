@@ -1,4 +1,4 @@
-# Global Values for 2bshop application - Local Development Configuration
+# Global Values for 2bshops application - Local Development Configuration
 global:
   environment: development
   domain: localhost

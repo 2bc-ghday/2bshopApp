@@ -33,10 +33,10 @@ if ! curl -s http://localhost:5000/v2/_catalog > /dev/null; then
 fi
 
 # Deploy the application
-echo "Deploying 2bshop application..."
+echo "Deploying 2bshops application..."
 cd /Users/dl2bcloud/_dev_/2bc-ghday/2bshopApp
-helm dependency update ./charts/2bshop
-helm upgrade --install 2bshop ./charts/2bshop --wait
+helm dependency update ./charts/2bshops
+helm upgrade --install 2bshops ./charts/2bshops --wait
 
 # Check deployment status
 echo "Checking deployment status..."
