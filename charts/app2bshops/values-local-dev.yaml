@@ -23,7 +23,7 @@ backend:
     repository: localhost:5000/backend
     tag: latest
     pullPolicy: Always
-    service:
+  service:
     type: NodePort
     port: 8000
       # Non-sensitive environment variables via ConfigMap for local development
