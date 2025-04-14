@@ -9,10 +9,10 @@ frontend:
     repository: localhost:5000/frontend
     tag: latest
     pullPolicy: Always
-    service:
+  service:
     type: NodePort
     port: 80
-      # Environment variables via ConfigMap for local development
+  # Environment variables via ConfigMap for local development
   configMap:
     VITE_API_URL: "http://localhost:8000"
     NODE_ENV: "development"
