@@ -18,11 +18,13 @@ resources:
     memory: 128Mi
 
 database:
-  host: "postgresql"
+  host: "{{ .Release.Name }}-postgresql"
   port: 5432
   name: "app"
-  user: "postgres"
-  password: "changethis"
+  # Credentials below should be overridden by parent chart or external secrets
+  # DO NOT use these default values in production
+  user: "postgres" 
+  password: "REPLACE_IN_DEPLOYMENT"
 
 # Non-sensitive environment variables via ConfigMap
 configMap: {}

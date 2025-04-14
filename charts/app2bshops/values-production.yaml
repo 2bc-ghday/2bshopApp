@@ -51,17 +51,24 @@ backend:
     SECRET_KEY: "${SECRET_KEY}"
     FIRST_SUPERUSER: "admin@2bshops.com"
     FIRST_SUPERUSER_PASSWORD: "${ADMIN_PASSWORD}"
+  # Database configuration
+  database:
+    host: "app2bshops-postgresql"
+    port: 5432
+    name: "app"
+    user: "postgres"
+    password: "${DB_PASSWORD}"
 
 postgresql:
   enabled: true
   image:
-    tag: "17"
+    tag: "12"
   auth:
     postgresPassword: "${DB_PASSWORD}"
     username: postgres
     password: "${DB_PASSWORD}"
     database: app
-    existingSecret: "backend-db-secrets"
+    existingSecret: "app2bshops-backend-db-secrets"
     secretKeys:
       adminPasswordKey: POSTGRES_PASSWORD
       userPasswordKey: POSTGRES_PASSWORD

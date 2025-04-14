@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: {{ .Release.Name }}-backend
   labels:
     {{- include "backend.labels" . | nindent 4 }}
 spec:
@@ -20,7 +20,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              until nc -z {{ .Values.database.host }} {{ .Values.database.port }}; do
+              until nc -z app2bshops-postgresql {{ .Values.database.port }}; do
                 echo "Waiting for database to be ready...";
                 sleep 2;
               done;
@@ -63,12 +63,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "backend.fullname" . }}-secrets
                   key: FIRST_SUPERUSER_PASSWORD
-            {{- if .Values.environment }}
-            {{- range $key, $value := .Values.environment }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-            {{- end }}
-            {{- end }}
           {{- if .Values.configMap }}
           envFrom:
             - configMapRef:
@@ -117,12 +111,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "backend.fullname" . }}-secrets
                   key: FIRST_SUPERUSER_PASSWORD
-            {{- if .Values.environment }}
-            {{- range $key, $value := .Values.environment }}
-            - name: {{ $key }}
-              value: {{ $value | quote }}
-            {{- end }}
-            {{- end }}
           {{- if .Values.configMap }}
           envFrom:
             - configMapRef:

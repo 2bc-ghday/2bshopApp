@@ -1,6 +1,6 @@
 # Global Values for 2bshops application - Local Development Configuration
 global:
-  environment: development
+  environment: local
   domain: localhost
 
 frontend:
@@ -14,7 +14,7 @@ frontend:
     port: 80
   # Environment variables via ConfigMap for local development
   configMap:
-    VITE_API_URL: "http:/localhost:8000"
+    VITE_API_URL: "http://localhost:8000"
     NODE_ENV: "development"
 
 backend:
@@ -29,8 +29,8 @@ backend:
   # Non-sensitive environment variables via ConfigMap for local development
   configMap:
     DOMAIN: "localhost"
-    ENVIRONMENT: "development" 
-    BACKEND_CORS_ORIGINS: "http://localhost,http://localhost:3000"
+    ENVIRONMENT: "local" 
+    BACKEND_CORS_ORIGINS: "http://localhost,http://localhost:3000,http://localhost:5173,http://localhost:80,http://localhost"
     PROJECT_NAME: "2B Shops Dev"
   # Sensitive data stored in Kubernetes Secrets
   # For local development, using simpler default values
@@ -38,8 +38,9 @@ backend:
     SECRET_KEY: "local-dev-secret-key-change-in-production"
     FIRST_SUPERUSER: "admin@example.com"
     FIRST_SUPERUSER_PASSWORD: "localdevpassword"
+  # Database configuration
   database:
-    host: "db"
+    host: "app2bshops-postgresql"
     port: 5432
     name: "app"
     user: "postgres"
@@ -47,29 +48,6 @@ backend:
 
 # PostgreSQL configuration
 postgresql:
-  fullnameOverride: "db"
-  auth:
-    postgresPassword: "localdevdbpassword"
-    username: postgres
-    password: "localdevdbpassword" 
-    database: app
-    existingSecret: "backend-db-secrets"
-    secretKeys:
-      adminPasswordKey: POSTGRES_PASSWORD
-      userPasswordKey: POSTGRES_PASSWORD
-  primary:
-    persistence:
-      enabled: true
-      size: 1Gi  # Smaller size for local development
-    resources:
-      limits:
-        cpu: 500m
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 256Mi
-
-db:
   enabled: true
   image:
     tag: "12"
@@ -78,10 +56,6 @@ db:
     username: postgres
     password: "localdevdbpassword" 
     database: app
-    existingSecret: "backend-db-secrets"
-    secretKeys:
-      adminPasswordKey: POSTGRES_PASSWORD
-      userPasswordKey: POSTGRES_PASSWORD
   primary:
     persistence:
       enabled: true
