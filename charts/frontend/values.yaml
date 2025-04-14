@@ -1,0 +1,21 @@
+replicaCount: 1
+
+image:
+  repository: frontend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Environment configuration via ConfigMap
+configMap: {}
