@@ -74,7 +74,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: backend-api
+            - name: api-port
               containerPort: 8000
               protocol: TCP
           env:
@@ -121,7 +121,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/v1/utils/health-check/
-              port: http
+              port: api-port
             initialDelaySeconds: 60
             periodSeconds: 10
             timeoutSeconds: 5
@@ -129,7 +129,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /api/v1/utils/health-check/
-              port: http
+              port: api-port
             initialDelaySeconds: 30
             periodSeconds: 5
             timeoutSeconds: 3

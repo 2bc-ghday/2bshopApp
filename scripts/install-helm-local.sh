@@ -4,7 +4,9 @@
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-CHART_DIR="$(cd "$(dirname "$0")" && pwd)/app2bshops"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="$SCRIPT_DIR/.."
+CHART_DIR="$APP_DIR/charts/app2bshops"
 VALUES_FILE="$CHART_DIR/values-local-dev.yaml"
 
 # Check if values file exists

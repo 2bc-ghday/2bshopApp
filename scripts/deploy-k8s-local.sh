@@ -9,7 +9,7 @@ set -e  # Exit immediately if a command exits with a non-zero status
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Setup local registry and build images
-$SCRIPT_DIR/setup-local-registry.sh
+$SCRIPT_DIR/build-push-local.sh
 
 # Check if kubectl is accessible
 if ! command -v kubectl &> /dev/null; then
@@ -38,7 +38,7 @@ if ! curl -s http://localhost:5000/v2/_catalog > /dev/null; then
 fi
 
 # Deploy the application
-$SCRIPT_DIR/install-local-dev.sh
+$SCRIPT_DIR/install-helm-local.sh
 
 # Wait for the application to be ready
 echo "Waiting for the application to be ready..."
@@ -68,4 +68,4 @@ fi
 echo "Frontend and backend pods are running"
 
 echo "Port-forwarding local services for easy access"
-$SCRIPT_DIR/port-forward-local-services.sh
+$SCRIPT_DIR/port-forward-local.sh

@@ -8,9 +8,9 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: backend-api
+      targetPort: api-port
       protocol: TCP
-      name: backend-api
+      name: api-port
   selector:
     app.kubernetes.io/name: {{ include "backend.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
