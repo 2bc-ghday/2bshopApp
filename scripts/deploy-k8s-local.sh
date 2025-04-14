@@ -42,10 +42,41 @@ $SCRIPT_DIR/install-helm-local.sh
 
 # Wait for the application to be ready
 echo "Waiting for the application to be ready..."
-while ! kubectl get pods | grep -q "Running"; do
-  sleep 5
+MAX_RETRIES=30
+RETRY_COUNTER=0
+SUCCESS=false
+
+while [ $RETRY_COUNTER -lt $MAX_RETRIES ]; do
+  # Check all pods are either Running or Completed
+  if kubectl get pods | grep -v "Running\|Completed" | grep -q "app2bshops"; then
+    echo "Waiting for all pods to be ready... ($((RETRY_COUNTER + 1))/$MAX_RETRIES)"
+    sleep 5
+    ((RETRY_COUNTER++))
+  else
+    # Verify all pod readiness
+    TOTAL_PODS=$(kubectl get pods -l app.kubernetes.io/instance=app2bshops -o name | wc -l | tr -d ' ')
+    READY_PODS=$(kubectl get pods -l app.kubernetes.io/instance=app2bshops -o jsonpath='{range .items[*]}{.status.containerStatuses[0].ready}{"\n"}{end}' | grep -c "true")
+    
+    if [ "$TOTAL_PODS" -eq "$READY_PODS" ] && [ "$TOTAL_PODS" -gt 0 ]; then
+      echo "All $TOTAL_PODS pods are ready!"
+      SUCCESS=true
+      break
+    else
+      echo "Waiting for pod readiness: $READY_PODS/$TOTAL_PODS ready... ($((RETRY_COUNTER + 1))/$MAX_RETRIES)"
+      sleep 5
+      ((RETRY_COUNTER++))
+    fi
+  fi
 done
-echo "Application is ready"
+
+if [ "$SUCCESS" = false ]; then
+  echo "Timed out waiting for application to be ready. Check pod status:"
+  kubectl get pods
+  echo "Continuing anyway, but the application might not be fully functional."
+else
+  echo "Application is ready"
+fi
+
 # Check if the frontend and backend services are available
 if ! kubectl get svc | grep -q "app2bshops-frontend"; then
   echo "Frontend service is not available"
