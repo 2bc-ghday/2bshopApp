@@ -1,24 +1,29 @@
 #!/bin/bash
 
-# Make the script executable
-chmod +x ./setup-local-registry.sh
+set -e  # Exit immediately if a command exits with a non-zero status
+
+# setup full output of commands and logs to screen
+# set -x
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Setup local registry and build images
-./setup-local-registry.sh
+$SCRIPT_DIR/setup-local-registry.sh
 
-# Check if kubectl is accessible (for Rancher Desktop)
+# Check if kubectl is accessible
 if ! command -v kubectl &> /dev/null; then
   echo "Please ensure kubectl is installed and configured"
   exit 1
 fi
 
-# Check if Rancher Desktop/Kubernetes is running
+# Check if local Kubernetes is running
 if ! kubectl cluster-info &> /dev/null; then
-  echo "Unable to connect to Kubernetes. Please make sure Rancher Desktop is running."
+  echo "Unable to connect to Kubernetes. Please make sure it is running."
   exit 1
 fi
 
-echo "Kubernetes cluster is running via Rancher Desktop"
+echo "Kubernetes cluster is up and running"
 
 # Check if local registry is accessible
 if ! curl -s http://localhost:5000/v2/_catalog > /dev/null; then
@@ -33,26 +38,34 @@ if ! curl -s http://localhost:5000/v2/_catalog > /dev/null; then
 fi
 
 # Deploy the application
-echo "Deploying 2bshops application..."
-cd /Users/dl2bcloud/_dev_/2bc-ghday/2bshopApp
-helm dependency update ./charts/2bshops
-helm upgrade --install 2bshops ./charts/2bshops --wait
+$SCRIPT_DIR/install-local-dev.sh
 
-# Check deployment status
-echo "Checking deployment status..."
-kubectl get pods
+# Wait for the application to be ready
+echo "Waiting for the application to be ready..."
+while ! kubectl get pods | grep -q "Running"; do
+  sleep 5
+done
+echo "Application is ready"
+# Check if the frontend and backend services are available
+if ! kubectl get svc | grep -q "app2bshops-frontend"; then
+  echo "Frontend service is not available"
+  exit 1
+fi
+if ! kubectl get svc | grep -q "app2bshops-backend"; then
+  echo "Backend service is not available"
+  exit 1
+fi
+echo "Frontend and backend services are available"
+# Check if the frontend and backend pods are running
+if ! kubectl get pods | grep -q "app2bshops-frontend"; then
+  echo "Frontend pod is not running"
+  exit 1
+fi
+if ! kubectl get pods | grep -q "app2bshops-backend"; then
+  echo "Backend pod is not running"
+  exit 1
+fi
+echo "Frontend and backend pods are running"
 
-# Port-forward services for easy access
-kubectl port-forward svc/shop-frontend 3000:80 > /dev/null 2>&1 &
-FRONTEND_PF_PID=$!
-echo "Frontend available at http://localhost:3000"
-
-kubectl port-forward svc/shop-backend 8000:8000 > /dev/null 2>&1 &
-BACKEND_PF_PID=$!
-echo "Backend API available at http://localhost:8000"
-
-echo "Press Ctrl+C to stop port-forwarding and exit"
-trap "kill $FRONTEND_PF_PID $BACKEND_PF_PID 2>/dev/null" EXIT
-
-# Wait for Ctrl+C
-wait
+echo "Port-forwarding local services for easy access"
+$SCRIPT_DIR/port-forward-local-services.sh

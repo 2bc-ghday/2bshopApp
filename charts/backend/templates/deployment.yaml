@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-backend
+  name: {{ include "backend.fullname" . }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
 spec:
@@ -70,11 +70,11 @@ spec:
           {{- end }}
 
       containers:
-        - name: backend
+        - name: {{ include "backend.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: backend-api
               containerPort: 8000
               protocol: TCP
           env:

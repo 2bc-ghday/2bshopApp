@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 # Check if local registry is accessible
 if ! curl -s http://localhost:5000/v2/_catalog > /dev/null; then
   echo "Local registry at localhost:5000 is not accessible."
@@ -11,8 +15,8 @@ fi
 
 # Build frontend and backend images using docker-compose
 echo "Building images using docker-compose..."
-cd ..
-docker-compose build frontend backend
+cd $APP_DIR
+docker compose build frontend backend
 
 # Tag and push images to local registry
 echo "Tagging and pushing frontend image..."
@@ -26,4 +30,4 @@ docker push localhost:5000/backend:latest
 echo "Images built and pushed to local registry"
 
 # Return to the original directory
-cd ../charts
+cd $SCRIPT_DIR

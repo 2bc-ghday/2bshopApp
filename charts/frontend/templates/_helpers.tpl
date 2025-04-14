@@ -4,7 +4,7 @@ Frontend labels
 {{- define "frontend.labels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/name: frontend
+app.kubernetes.io/name: {{ .Release.Name }}-frontend
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: frontend
 {{- end -}}
@@ -13,7 +13,7 @@ app.kubernetes.io/component: frontend
 Frontend selector labels
 */}}
 {{- define "frontend.selectorLabels" -}}
-app.kubernetes.io/name: frontend
+app.kubernetes.io/name: {{ .Release.Name }}-frontend
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: frontend
 {{- end -}}

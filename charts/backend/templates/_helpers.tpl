@@ -4,7 +4,7 @@ Backend labels
 {{- define "backend.labels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-app.kubernetes.io/name: backend
+app.kubernetes.io/name: {{ .Release.Name }}-backend
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: backend
 {{- end -}}
@@ -13,7 +13,7 @@ app.kubernetes.io/component: backend
 Backend selector labels
 */}}
 {{- define "backend.selectorLabels" -}}
-app.kubernetes.io/name: backend
+app.kubernetes.io/name: {{ .Release.Name }}-backend
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/component: backend
 {{- end -}}
