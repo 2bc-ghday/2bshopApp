@@ -1,182 +1,88 @@
-# Full Stack FastAPI Template
+# 2B Shops Application
 
-<a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test/badge.svg" alt="Test"></a>
-<a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/fastapi/full-stack-fastapi-template" target="_blank"><img src="https://coverage-badge.samuelcolvin.workers.dev/fastapi/full-stack-fastapi-template.svg" alt="Coverage"></a>
+This project is a fork of the [Full Stack FastAPI Template](https://github.com/fastapi/full-stack-fastapi-template).  
+It was modified by [2bcloud](https://2bcloud.io) as part of the GitHub April 2025 Workshop hosted on the Microsoft TLV Reactor.  
+The goal of this project is to provide a **working** full-stack application exmple for deomonstrating the full capabilities of the GitHub Copilot and GitHub Advanced Security tools.  
+The application is a simple e-commerce platform that allows users to create an account, manage their profile, and view items for sale.
+examples for security vulnerability detection.
+
+## Github Copilot Demo Videos
+The following videos demonstrate the capabilities of GitHub Copilot in generating code for the 2B Shops application:
+- [Github Copliot Workspace](./videos/1-workspace-example.mp4)
+- [GitHub Copilot Agent - Backend](./videos/2-agent-backend.mp4)
+- [GitHub Copilot Agent - Frontend](./videos/3-agent-frontend.mp4)
+- [Github Copliot MCP Example](./videos/4-mcp-example.mp4)
 
 ## Technology Stack and Features
 
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
-    - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
-    - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-    - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
+  - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
+  - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
 - 🚀 [React](https://react.dev) for the frontend.
-    - 💃 Using TypeScript, hooks, Vite, and other parts of a modern frontend stack.
-    - 🎨 [Chakra UI](https://chakra-ui.com) for the frontend components.
-    - 🤖 An automatically generated frontend client.
-    - 🧪 [Playwright](https://playwright.dev) for End-to-End testing.
-    - 🦇 Dark mode support.
-- 🐋 [Docker Compose](https://www.docker.com) for development and production.
-- 🔒 Secure password hashing by default.
-- 🔑 JWT (JSON Web Token) authentication.
-- 📫 Email based password recovery.
-- ✅ Tests with [Pytest](https://pytest.org).
-- 📞 [Traefik](https://traefik.io) as a reverse proxy / load balancer.
-- 🚢 Deployment instructions using Docker Compose, including how to set up a frontend Traefik proxy to handle automatic HTTPS certificates.
+  - 💃 Using TypeScript, hooks, Vite, and other parts of a modern frontend stack.
+  - 🎨 [Chakra UI](https://chakra-ui.com) for the frontend components.
+- 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
 - 🏭 CI (continuous integration) and CD (continuous deployment) based on GitHub Actions.
+- 🛡️ GitHub Advanced Security
 
-### Dashboard Login
+## Configure
 
-[![API docs](img/login.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Dashboard - Admin
-
-[![API docs](img/dashboard.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Dashboard - Create User
-
-[![API docs](img/dashboard-create.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Dashboard - Items
-
-[![API docs](img/dashboard-items.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Dashboard - User Settings
-
-[![API docs](img/dashboard-user-settings.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Dashboard - Dark Mode
-
-[![API docs](img/dashboard-dark.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-### Interactive API Documentation
-
-[![API docs](img/docs.png)](https://github.com/fastapi/full-stack-fastapi-template)
-
-## How To Use It
-
-You can **just fork or clone** this repository and use it as is.
-
-✨ It just works. ✨
-
-### How to Use a Private Repository
-
-If you want to have a private repository, GitHub won't allow you to simply fork it as it doesn't allow changing the visibility of forks.
-
-But you can do the following:
-
-- Create a new GitHub repo, for example `my-full-stack`.
-- Clone this repository manually, set the name with the name of the project you want to use, for example `my-full-stack`:
-
-```bash
-git clone git@github.com:fastapi/full-stack-fastapi-template.git my-full-stack
-```
-
-- Enter into the new directory:
-
-```bash
-cd my-full-stack
-```
-
-- Set the new origin to your new repository, copy it from the GitHub interface, for example:
-
-```bash
-git remote set-url origin git@github.com:octocat/my-full-stack.git
-```
-
-- Add this repo as another "remote" to allow you to get updates later:
-
-```bash
-git remote add upstream git@github.com:fastapi/full-stack-fastapi-template.git
-```
-
-- Push the code to your new repository:
-
-```bash
-git push -u origin master
-```
-
-### Update From the Original Template
-
-After cloning the repository, and after doing changes, you might want to get the latest changes from this original template.
-
-- Make sure you added the original repository as a remote, you can check it with:
-
-```bash
-git remote -v
-
-origin    git@github.com:octocat/my-full-stack.git (fetch)
-origin    git@github.com:octocat/my-full-stack.git (push)
-upstream    git@github.com:fastapi/full-stack-fastapi-template.git (fetch)
-upstream    git@github.com:fastapi/full-stack-fastapi-template.git (push)
-```
-
-- Pull the latest changes without merging:
-
-```bash
-git pull --no-commit upstream master
-```
-
-This will download the latest changes from this template without committing them, that way you can check everything is right before committing.
-
-- If there are conflicts, solve them in your editor.
-
-- Once you are done, commit the changes:
-
-```bash
-git merge --continue
-```
-
-### Configure
+### When Using Docker Compose
 
 You can then update configs in the `.env` files to customize your configurations.
 
-Before deploying it, make sure you change at least the values for:
+### When Using Kubernetes
 
-- `SECRET_KEY`
-- `FIRST_SUPERUSER_PASSWORD`
-- `POSTGRES_PASSWORD`
-
-You can (and should) pass these as environment variables from secrets.
+You can then update configs in the `values.yaml` files to customize your configurations.
 
 Read the [deployment.md](./deployment.md) docs for more details.
 
-### Generate Secret Keys
+## Kubernetes Deployment
 
-Some environment variables in the `.env` file have a default value of `changethis`.
+This project includes Kubernetes deployment capabilities using Helm charts:
 
-You have to change them with a secret key, to generate secret keys you can run the following command:
+- `/charts/` directory contains all Helm charts for deploying the application on Kubernetes
+- `/charts/app2bshops/` is the umbrella chart that deploys the entire application
+- `/charts/backend/` and `/charts/frontend/` contain component-specific charts
+
+### Local Kubernetes Deployment
+
+To deploy the application to a local Kubernetes cluster (like minikube, kind, or Docker Desktop), you can use:
 
 ```bash
-python -c "import secrets; print(secrets.token_urlsafe(32))"
+./scripts/deploy-k8s-local.sh
 ```
 
-Copy the content and use that as password / secret key. And run that again to generate another secure key.
+This script will:
 
-## How To Use It - Alternative With Copier
+1. Build and push Docker images to a local registry
+2. Install the Helm chart with local development values
+3. Set up port forwarding to access services locally
 
-This section and all references to Copier have been removed as the project is now a standalone application.
+After deployment, you can access:
 
-## Backend Development
+- Frontend at http://localhost:5173
+- Backend at http://localhost:8000
 
-Backend docs: [backend/README.md](./backend/README.md).
+## GitHub Advanced Security Examples
 
-## Frontend Development
+This repository includes examples of common security vulnerabilities that can be detected using GitHub Advanced Security:
 
-Frontend docs: [frontend/README.md](./frontend/README.md).
+- **SQL Injection**: Example of SQL injection vulnerability in `/advanced-security-samples/SQL_Injection_Vulnerability.py`
+- **XSS (Cross-Site Scripting)**: Example of XSS vulnerability in `/advanced-security-samples/Cross-Site Scripting (XSS) Vulnerability.js`
+- **Hardcoded Credentials**: Example of hardcoded credentials in `/advanced-security-samples/exposed_credentials.py`
+
+These examples are for demonstration purposes only and showcase how GitHub Advanced Security can detect these vulnerabilities automatically.
+
+**DO NOT** use these examples in production code!
 
 ## Deployment
 
 Deployment docs: [deployment.md](./deployment.md).
 
-## Development
+## Credits
 
-General development docs: [development.md](./development.md).
-
-This includes using Docker Compose, custom local domains, `.env` configurations, etc.
-
-## Release Notes
-
-Check the file [release-notes.md](./release-notes.md).
+This project is a fork of [Full Stack FastAPI Template](https://github.com/fastapi/full-stack-fastapi-template) created by [Sebastián Ramírez (tiangolo)](https://github.com/tiangolo).
 
 ## License
 
