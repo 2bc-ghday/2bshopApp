@@ -33,9 +33,3 @@ jobs:
         run: uv run bash scripts/tests-start.sh "Coverage for ${{ github.sha }}"
         working-directory: backend
       - run: docker compose down -v --remove-orphans
-      - name: Store coverage files
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-html
-          path: backend/htmlcov
-          include-hidden-files: true
