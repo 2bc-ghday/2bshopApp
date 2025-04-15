@@ -7,11 +7,25 @@ The application is a simple e-commerce platform that allows users to create an a
 examples for security vulnerability detection.
 
 ## Github Copilot Demo Videos
+
 The following videos demonstrate the capabilities of GitHub Copilot in generating code for the 2B Shops application:
+
 - [Github Copliot Workspace](./videos/1-workspace-example.mp4)
 - [GitHub Copilot Agent - Backend](./videos/2-agent-backend.mp4)
 - [GitHub Copilot Agent - Frontend](./videos/3-agent-frontend.mp4)
 - [Github Copliot MCP Example](./videos/4-mcp-example.mp4)
+
+## GitHub Advanced Security Examples
+
+This repository includes examples of common security vulnerabilities that can be detected using GitHub Advanced Security:
+
+- **SQL Injection**: Example of SQL injection vulnerability in `/advanced-security-samples/SQL_Injection_Vulnerability.py`
+- **XSS (Cross-Site Scripting)**: Example of XSS vulnerability in `/advanced-security-samples/Cross-Site Scripting (XSS) Vulnerability.js`
+- **Hardcoded Credentials**: Example of hardcoded credentials in `/advanced-security-samples/exposed_credentials.py`
+
+These examples are for demonstration purposes only and showcase how GitHub Advanced Security can detect these vulnerabilities automatically.
+
+**DO NOT** use these examples in production code!
 
 ## Technology Stack and Features
 
@@ -64,17 +78,7 @@ After deployment, you can access:
 - Frontend at http://localhost:5173
 - Backend at http://localhost:8000
 
-## GitHub Advanced Security Examples
-
-This repository includes examples of common security vulnerabilities that can be detected using GitHub Advanced Security:
-
-- **SQL Injection**: Example of SQL injection vulnerability in `/advanced-security-samples/SQL_Injection_Vulnerability.py`
-- **XSS (Cross-Site Scripting)**: Example of XSS vulnerability in `/advanced-security-samples/Cross-Site Scripting (XSS) Vulnerability.js`
-- **Hardcoded Credentials**: Example of hardcoded credentials in `/advanced-security-samples/exposed_credentials.py`
-
-These examples are for demonstration purposes only and showcase how GitHub Advanced Security can detect these vulnerabilities automatically.
-
-**DO NOT** use these examples in production code!
+#
 
 ## Deployment
 
