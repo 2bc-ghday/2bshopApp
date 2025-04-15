@@ -49,8 +49,6 @@ You can then update configs in the `.env` files to customize your configurations
 
 You can then update configs in the `values.yaml` files to customize your configurations.
 
-Read the [deployment.md](./deployment.md) docs for more details.
-
 ## Kubernetes Deployment
 
 This project includes Kubernetes deployment capabilities using Helm charts:
@@ -82,7 +80,9 @@ After deployment, you can access:
 
 ## Deployment
 
-Deployment docs: [deployment.md](./deployment.md).
+<!-- Deployment docs: [deployment.md](./deployment.md). -->
+
+TBD
 
 ## Credits
 
