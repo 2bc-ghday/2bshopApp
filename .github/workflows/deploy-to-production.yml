@@ -22,8 +22,10 @@ jobs:
 
     steps:
       - name: Get release tag
+        env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
         run: |
-          RELEASE_TAG=$(echo "${{ github.event.workflow_run.head_branch }}" | sed 's/^refs\/tags\///')
+          RELEASE_TAG=$(echo "$HEAD_BRANCH" | sed 's/^refs\/tags\///')
           # Remove leading 'v' if present
           echo "Release tag: ${RELEASE_TAG#v}"
           echo "RELEASE_TAG=${RELEASE_TAG#v}" >> $GITHUB_ENV
