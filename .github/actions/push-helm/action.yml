@@ -1,0 +1,32 @@
+name: Push Helm Chart to ACR
+description: Push Helm chart to Azure Container Registry (ACR)
+
+inputs:
+  chart-name:
+    description: 'Name of the Helm chart to push'
+    required: true
+  sha-tag:
+    description: 'Git SHA tag to use for the chart version'
+    required: true
+  app-version:
+    description: 'App version of the Helm chart to push'
+    required: true
+  acr-name:
+    description: 'Azure Container Registry name'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Push Helm chart
+      shell: bash
+      run: |
+        set -x
+        # Create a directory for packaged charts
+        mkdir -p packaged-charts
+
+        # Package the chart
+        helm package charts/${{ inputs.chart-name }} -d packaged-charts --version ${{ inputs.app-version }}-${{ inputs.sha-tag }} --app-version ${{ inputs.app-version }}
+
+        # push the chart to ACR
+        helm push packaged-charts/${{ inputs.chart-name }}-*.tgz oci://${{ inputs.acr-name }}/helm

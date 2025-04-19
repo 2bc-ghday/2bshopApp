@@ -11,5 +11,9 @@ charts/*/charts/*.tgz
 charts/*/Chart.lock
 .helm/
 
+# Terraform specific files
+.terraform/
+.terraform.lock.hcl
+
 # Ignore mac DS_Store files
 .DS_Store

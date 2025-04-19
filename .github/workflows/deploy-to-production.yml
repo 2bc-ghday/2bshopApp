@@ -1,0 +1,153 @@
+name: Deploy to Production
+description: Deploy to production environment
+
+concurrency: production
+
+on:
+  workflow_run:
+    workflows: ["Push to ACR"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+      # github.event.workflow_run.event == 'release'
+    runs-on: ubuntu-latest
+    environment: production
+
+    permissions:
+      contents: read
+      id-token: write # Required for Azure OIDC authentication
+
+    steps:
+      - name: Get release tag
+        env:
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          RELEASE_TAG=$(echo "$HEAD_BRANCH" | sed 's/^refs\/tags\///')
+          # Remove leading 'v' if present
+          echo "Release tag: ${RELEASE_TAG#v}"
+          echo "RELEASE_TAG=${RELEASE_TAG#v}" >> $GITHUB_ENV
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'latest'
+
+      # Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      # Azure login using OIDC
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+
+      # Set AKS context
+      - name: Set AKS context
+        uses: azure/aks-set-context@v4
+        with:
+          resource-group: 2bshops
+          cluster-name: 2bshops
+          admin: false
+          use-kubelogin: true
+
+      # Login to ACR
+      - name: Login to ACR
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ vars.ACR_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      # Create Helm values override
+      - name: Update Helm values
+        run: |
+          # Create values-override.yaml with release-specific values
+          cat > ./values-override.yaml <<EOF
+          frontend:
+            image:
+              tag: ${{ env.RELEASE_TAG }}
+          backend:
+            image:
+              tag: ${{ env.RELEASE_TAG }}
+          EOF
+
+      # Terraform deployment using the new action
+      - name: Terraform Deploy
+        uses: ./.github/actions/terraform-deploy
+        with:
+          working-directory: ./terraform
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          secrets-json: |
+            {
+              "tenant_id": "${{ secrets.AZURE_TENANT_ID }}",
+              "secrets": {
+                "SECRET-KEY": "${{ secrets.SECRET_KEY }}",
+                "POSTGRES-PASSWORD": "${{ secrets.POSTGRES_PASSWORD }}",
+                "FIRST-SUPERUSER": "${{ secrets.FIRST_SUPERUSER }}",
+                "FIRST-SUPERUSER-PASSWORD": "${{ secrets.FIRST_SUPERUSER_PASSWORD }}",
+                "SMTP-HOST": "${{ secrets.SMTP_HOST }}",
+                "SMTP-USER": "${{ secrets.SMTP_USER }}",
+                "SMTP-PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
+                "SENTRY-DSN": "${{ secrets.SENTRY_DSN }}"
+              }
+            } 
+
+    
+      # Pull the Helm chart from ACR
+      - name: Pull Helm chart from ACR
+        run: |
+          # Login to ACR using az cli for Helm operations
+          az acr login --name 2bshops
+          
+          # Create a directory for the chart
+          mkdir -p pulled-chart
+          
+          # Get the SHA-tagged version of the chart we just built
+          echo "Pulling Helm chart with tag ${{ env.RELEASE_TAG }} from ACR..."
+          
+          # Try to get SHA-tagged version first, fall back to release tag
+          helm pull oci://2bshops.azurecr.io/helm/app2bshops/app2bshops \
+            --version $(echo ${{ env.RELEASE_TAG }} | sed 's/^v//') \
+            --destination pulled-chart || \
+          helm pull oci://2bshops.azurecr.io/helm/app2bshops/app2bshops \
+            --version $(echo ${{ env.RELEASE_TAG }} | sed 's/^v//')-$(echo $GITHUB_SHA | cut -c1-7) \
+            --destination pulled-chart
+          
+          # Extract the chart
+          tar -xzf pulled-chart/app2bshops-*.tgz -C pulled-chart
+
+      # Deploy with Helm
+      - name: Deploy to AKS with Helm
+        run: |
+          helm upgrade --install app2bshops ./pulled-chart/app2bshops \
+            --namespace 2bshops \
+            --create-namespace \
+            --values ./charts/app2bshops/values-production.yaml \
+            --values ./values-override.yaml \
+            --set global.releaseVersion="${{ env.RELEASE_TAG }}" \
+            --set backend.secretProvider.tenantId="${{ secrets.AZURE_TENANT_ID }}" \
+            --atomic \
+            --timeout 10m
+
+      # Verify deployment
+      - name: Verify deployment
+        run: |
+          echo "Waiting for deployments to be ready..."
+          kubectl wait --for=condition=available deployment/app2bshops-frontend deployment/app2bshops-backend --timeout=5m -n 2bshops
+          
+          echo "Checking pods status..."
+          kubectl get pods -n 2bshops
+          
+          echo "Deployment to AKS completed successfully!"
