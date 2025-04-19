@@ -40,7 +40,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       # Build and push Docker images
-      - name: Build and push frontent docker image
+      - name: Build and push frontend docker image
         uses: ./.github/actions/build-push-docker
         with:
           app-name: frontend
