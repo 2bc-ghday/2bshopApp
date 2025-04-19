@@ -10,8 +10,7 @@ on:
     #   - 'backend/**'
     #   - 'charts/**'
     branches:
-      # - master
-      - feature-deploy-to-aks # for testing
+     - master
 
   release:
     types:
