@@ -1,0 +1,20 @@
+apiVersion: v2
+name: app2bshops
+description: Umbrella chart for 2bshops application
+version: 0.1.0
+appVersion: "1.0.0"
+type: application
+# This is the umbrella chart for the 2bshops application, which includes
+# the frontend, backend, and PostgreSQL components. It manages the dependencies
+# and configurations for the entire application stack.
+dependencies:
+  - name: frontend
+    version: 0.1.0
+    repository: "file://../frontend"
+  - name: backend
+    version: 0.1.0
+    repository: "file://../backend"
+  - name: postgresql
+    version: "16.6.3"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled

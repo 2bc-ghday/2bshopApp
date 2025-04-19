@@ -1,0 +1,122 @@
+name: Cleanup ACR Artifacts
+
+on:
+  # Run once a week on Sunday at midnight
+  schedule:
+    - cron: "0 0 * * 0"
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  cleanup-acr:
+    runs-on: ubuntu-latest
+    environment: production # Use production environment for ACR access
+    
+    steps:
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Cleanup Docker Images in ACR
+        run: |
+          # Set the repository names and keep count
+          FRONTEND_REPO="frontend"
+          BACKEND_REPO="backend"
+          KEEP_COUNT=5
+          
+          echo "Cleaning up Docker images - keeping latest $KEEP_COUNT versions"
+          
+          # Clean frontend images
+          echo "Cleaning $FRONTEND_REPO repository..."
+          # Get all tags except 'latest' sorted by creation date
+          TAGS=$(az acr repository show-tags --name 2bshops --repository $FRONTEND_REPO --orderby time_desc -o tsv | grep -v "latest")
+          
+          # Count how many tags we have
+          TAG_COUNT=$(echo "$TAGS" | wc -l)
+          
+          if [ "$TAG_COUNT" -gt "$KEEP_COUNT" ]; then
+            # Calculate how many to delete
+            DELETE_COUNT=$((TAG_COUNT - KEEP_COUNT))
+            
+            # Get tags to delete (excluding the first KEEP_COUNT tags)
+            TAGS_TO_DELETE=$(echo "$TAGS" | tail -n "$DELETE_COUNT")
+            
+            echo "Deleting $DELETE_COUNT old tags from $FRONTEND_REPO"
+            for TAG in $TAGS_TO_DELETE; do
+              echo "Deleting tag: $TAG"
+              az acr repository delete --name 2bshops --image "$FRONTEND_REPO:$TAG" --yes
+            done
+          else
+            echo "No cleanup needed for $FRONTEND_REPO. Only $TAG_COUNT tags found."
+          fi
+          
+          # Clean backend images
+          echo "Cleaning $BACKEND_REPO repository..."
+          # Get all tags except 'latest' sorted by creation date
+          TAGS=$(az acr repository show-tags --name 2bshops --repository $BACKEND_REPO --orderby time_desc -o tsv | grep -v "latest")
+          
+          # Count how many tags we have
+          TAG_COUNT=$(echo "$TAGS" | wc -l)
+          
+          if [ "$TAG_COUNT" -gt "$KEEP_COUNT" ]; then
+            # Calculate how many to delete
+            DELETE_COUNT=$((TAG_COUNT - KEEP_COUNT))
+            
+            # Get tags to delete (excluding the first KEEP_COUNT tags)
+            TAGS_TO_DELETE=$(echo "$TAGS" | tail -n "$DELETE_COUNT")
+            
+            echo "Deleting $DELETE_COUNT old tags from $BACKEND_REPO"
+            for TAG in $TAGS_TO_DELETE; do
+              echo "Deleting tag: $TAG"
+              az acr repository delete --name 2bshops --image "$BACKEND_REPO:$TAG" --yes
+            done
+          else
+            echo "No cleanup needed for $BACKEND_REPO. Only $TAG_COUNT tags found."
+          fi
+          
+      - name: Cleanup Helm Charts in ACR
+        run: |
+          # Set the Helm repository names and keep count
+          REPOS=("helm/frontend" "helm/backend" "helm/app2bshops")
+          KEEP_COUNT=5
+          
+          echo "Cleaning up Helm charts - keeping latest $KEEP_COUNT versions"
+          
+          for REPO in "${REPOS[@]}"; do
+            echo "Cleaning $REPO repository..."
+            
+            # List all Helm chart versions in OCI format
+            VERSIONS=$(az acr repository show-manifests --name 2bshops --repository "$REPO" --orderby time_desc -o tsv | awk '{print $2}')
+            
+            # Count how many versions we have
+            VERSION_COUNT=$(echo "$VERSIONS" | grep -v "^$" | wc -l)
+            
+            if [ "$VERSION_COUNT" -gt "$KEEP_COUNT" ]; then
+              # Calculate how many to delete
+              DELETE_COUNT=$((VERSION_COUNT - KEEP_COUNT))
+              
+              # Get versions to delete (excluding the first KEEP_COUNT versions)
+              VERSIONS_TO_DELETE=$(echo "$VERSIONS" | grep -v "^$" | tail -n "$DELETE_COUNT")
+              
+              echo "Deleting $DELETE_COUNT old versions from $REPO"
+              for VERSION in $VERSIONS_TO_DELETE; do
+                echo "Deleting version: $VERSION"
+                DIGEST=$(az acr repository show-manifests --name 2bshops --repository "$REPO" --orderby time_asc -o tsv | grep "$VERSION" | awk '{print $1}')
+                if [ ! -z "$DIGEST" ]; then
+                  az acr repository delete --name 2bshops --image "$REPO@$DIGEST" --yes
+                fi
+              done
+            else
+              echo "No cleanup needed for $REPO. Only $VERSION_COUNT versions found."
+            fi
+          done
+          
+      - name: Purge deleted manifests
+        run: |
+          echo "Running purge operation to reclaim storage..."
+          az acr run --registry 2bshops --cmd "acr purge --filter 'frontend:.*' --filter 'backend:.*' --ago 30d --untagged" /dev/null
+          echo "Purge completed successfully"

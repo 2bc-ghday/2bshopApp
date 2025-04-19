@@ -1,0 +1,88 @@
+# Production-specific values
+global:
+  environment: production
+  domain: 2bshops.com
+
+frontend:
+  replicaCount: 3
+  image:
+    repository: 2bshops.azurecr.io/frontend
+    # tag will be set by GitHub Actions to the commit SHA
+    tag: latest
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  service:
+    type: ClusterIP
+  # ConfigMap approach for frontend environment variables
+  configMap:
+    VITE_API_URL: "https://api.2bshops.com"
+    NODE_ENV: "production"
+    
+backend:
+  replicaCount: 3
+  image:
+    repository: 2bshops.azurecr.io/backend
+    # tag will be set by GitHub Actions to the commit SHA
+    tag: latest
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  service:
+    type: ClusterIP
+  # ConfigMap for non-sensitive environment variables
+  configMap:
+    DOMAIN: "2bshops.com"
+    ENVIRONMENT: "production"
+    BACKEND_CORS_ORIGINS: "https://2bshops.com"
+    PROJECT_NAME: "2B Shops Production"
+  # Secrets will be provided by CSI driver in production
+  secretProvider:
+    enabled: true
+    keyVaultName: "2bshops-kv"
+    tenantId: "${AZURE_TENANT_ID}"
+    FIRST_SUPERUSER: "admin@2bshops.com"
+    FIRST_SUPERUSER_PASSWORD: "${ADMIN_PASSWORD}"
+  # Database configuration
+  database:
+    host: "app2bshops-postgresql"
+    port: 5432
+    name: "app"
+    user: "postgres"
+    password: "${DB_PASSWORD}"
+
+postgresql:
+  enabled: true
+  image:
+    tag: "12"
+  auth:
+    postgresPassword: "${DB_PASSWORD}"
+    username: postgres
+    password: "${DB_PASSWORD}"
+    database: app
+    existingSecret: "app2bshops-backend-db-secrets"
+    secretKeys:
+      adminPasswordKey: POSTGRES_PASSWORD
+      userPasswordKey: POSTGRES_PASSWORD
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: "managed-premium"
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi

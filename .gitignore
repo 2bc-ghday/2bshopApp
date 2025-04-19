@@ -4,3 +4,13 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Helm specific files
+charts/*/charts/*.tgz
+# Keep Chart.lock in version control by default, but can be ignored if preferred
+charts/*/Chart.lock
+.helm/
+
+# Terraform specific files
+.terraform/
+.terraform.lock.hcl

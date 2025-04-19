@@ -1,0 +1,32 @@
+name: 'Build Docker Images'
+description: 'Build and push Docker images to container registry'
+
+inputs:
+  app-name:
+    description: 'Name of the application'
+    required: true
+  app-tag:
+    description: 'The tag to use for the Docker image'
+    required: true
+  acr-server:
+    description: 'ACR server URL'
+    required: true
+  stack-name:
+    description: 'Stack name for docker compose project'
+    required: true
+    default: '2bshops'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and Push Docker Images
+      shell: bash
+      run: |
+        # Build images with docker compose
+        COMPOSE_BAKE=true docker compose -f docker-compose.yml --project-name ${{ inputs.stack-name }} build ${{ inputs.app-name }}
+        
+        # Tag app image
+        docker tag ${{ inputs.app-name }}:latest ${{ inputs.acr-server }}/${{ inputs.app-name }}:${{ inputs.app-tag }}
+        docker tag ${{ inputs.app-name }}:latest ${{ inputs.acr-server }}/${{ inputs.app-name }}:latest
+        # Push all app tags
+        docker push --all-tags ${{ inputs.acr-server }}/${{ inputs.app-name }}

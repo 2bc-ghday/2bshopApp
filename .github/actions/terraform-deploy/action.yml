@@ -1,0 +1,43 @@
+name: 'Terraform Deploy'
+description: 'Deploy infrastructure using Terraform'
+inputs:
+  working-directory:
+    description: 'Terraform working directory'
+    required: true
+  tenant-id:
+    description: 'Azure Tenant ID'
+    required: true
+  secrets-json:
+    description: 'JSON string of secrets to pass to Terraform'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.7.0
+
+    - name: Terraform Init
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        cat > backend.conf <<EOF
+        resource_group_name  = "2bshops"
+        storage_account_name = "2bshopsstate"
+        container_name       = "tfstate"
+        key                  = "aks-infra.tfstate"
+        EOF
+        terraform init -backend-config=backend.conf
+
+    - name: Setup Terraform Variables
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        echo '${{ inputs.secrets-json }}' > terraform.tfvars.json
+
+    - name: Terraform Apply
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        terraform apply -auto-approve -var-file=terraform.tfvars.json

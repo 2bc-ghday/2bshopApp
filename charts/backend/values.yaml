@@ -1,0 +1,47 @@
+replicaCount: 1
+
+image:
+  repository: backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+database:
+  host: "{{ .Release.Name }}-postgresql"
+  port: 5432
+  name: "app"
+  # Credentials below should be overridden by parent chart or external secrets
+  # DO NOT use these default values in production
+  user: "postgres" 
+  password: "REPLACE_IN_DEPLOYMENT"
+
+# Non-sensitive environment variables via ConfigMap
+configMap: {}
+  # These will be overridden by the parent chart
+  # DOMAIN: localhost
+  # ENVIRONMENT: local
+  # PROJECT_NAME: "Acme Inc."
+  # BACKEND_CORS_ORIGINS: "http://localhost,http://localhost:5173,https://localhost,https://localhost:5173"
+
+# Sensitive data to be stored in Kubernetes Secrets
+secrets:
+  SECRET_KEY: "changethis"
+  FIRST_SUPERUSER: "admin@example.com"
+  FIRST_SUPERUSER_PASSWORD: "changethis"
+
+# Azure Key Vault integration with CSI Secret Store
+secretProvider:
+  enabled: false  # Set to true in production values
+  keyVaultName: "2bshops-kv"
+  tenantId: ""    # Will be provided by workflow
