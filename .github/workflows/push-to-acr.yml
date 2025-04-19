@@ -5,12 +5,12 @@ concurrency: production
 
 on:
   push:
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
-      - 'charts/**'
+    # paths:
+    #   - 'frontend/**'
+    #   - 'backend/**'
+    #   - 'charts/**'
     branches:
-      - master
+      # - master
       - feature-deploy-to-aks # for testing
 
   release:
