@@ -39,9 +39,3 @@ secrets:
   SECRET_KEY: "changethis"
   FIRST_SUPERUSER: "admin@example.com"
   FIRST_SUPERUSER_PASSWORD: "changethis"
-
-# Azure Key Vault integration with CSI Secret Store
-secretProvider:
-  enabled: false  # Set to true in production values
-  keyVaultName: "2bshops-kv"
-  tenantId: ""    # Will be provided by workflow

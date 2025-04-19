@@ -46,11 +46,9 @@ backend:
     ENVIRONMENT: "production"
     BACKEND_CORS_ORIGINS: "https://2bshops.com"
     PROJECT_NAME: "2B Shops Production"
-  # Secrets will be provided by CSI driver in production
-  secretProvider:
-    enabled: true
-    keyVaultName: "2bshops-kv"
-    tenantId: "${AZURE_TENANT_ID}"
+  # Secrets will be provided by GitHub Actions
+  secrets:
+    SECRET_KEY: "${SECRET_KEY}"
     FIRST_SUPERUSER: "admin@2bshops.com"
     FIRST_SUPERUSER_PASSWORD: "${ADMIN_PASSWORD}"
   # Database configuration

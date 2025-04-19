@@ -1,0 +1,31 @@
+name: Build and Push Docker Images
+on:
+  push:
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Login to ACR
+      - name: Login to ACR
+        uses: azure/docker-login@v2
+        with:
+          login-server: 2bshops.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      # Build and push the Docker images
+      - name: Build and Push Frontend Docker Image
+        run: |
+          COMPOSE_BAKE=true docker compose -f docker-compose.yml --project-name ${{ vars.STACK_NAME_PRODUCTION }} build frontend backend
+          docker tag frontend:latest 2bshops.azurecr.io/frontend:${{ github.sha }}
+          docker tag backend:latest 2bshops.azurecr.io/backend:${{ github.sha }}
+          docker push 2bshops.azurecr.io/frontend:${{ github.sha }}
+          docker push 2bshops.azurecr.io/backend:${{ github.sha }}
