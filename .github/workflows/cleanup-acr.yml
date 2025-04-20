@@ -8,10 +8,15 @@ on:
   # Allow manual triggering
   workflow_dispatch:
 
+# Requierd for OIDC authentication to Azure
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   cleanup-acr:
     runs-on: ubuntu-latest
-    environment: production # Use production environment for ACR access
+    environment: production # Use production environment for Azure access
     
     steps:
       - name: Azure login
