@@ -10,10 +10,21 @@ examples for security vulnerability detection.
 
 The following videos demonstrate the capabilities of GitHub Copilot in generating code for the 2B Shops application:
 
-- [Github Copliot Workspace](./videos/1-workspace-example.mp4)
-- [GitHub Copilot Agent - Backend](./videos/2-agent-backend.mp4)
-- [GitHub Copilot Agent - Frontend](./videos/3-agent-frontend.mp4)
-- [Github Copliot MCP Example](./videos/4-mcp-example.mp4)
+### Github Copilot Workspace
+<video src="https://github.com/2bc-ghday/2bshopApp/blob/master/videos/1-workspace-example.mp4?raw=true" controls="controls" style="max-width: 730px;" allowfullscreen>
+</video>
+
+### GitHub Copilot Agent - Backend
+<video src="https://github.com/2bc-ghday/2bshopApp/blob/master/videos/2-agent-backend.mp4?raw=true" controls="controls" style="max-width: 730px;" allowfullscreen>
+</video>
+
+### GitHub Copilot Agent - Frontend
+<video src="https://github.com/2bc-ghday/2bshopApp/blob/master/videos/3-agent-frontend.mp4?raw=true" controls="controls" style="max-width: 730px;" allowfullscreen>
+</video>
+
+### Github Copilot MCP Example
+<video src="https://github.com/2bc-ghday/2bshopApp/blob/master/videos/4-mcp-example.mp4?raw=true" controls="controls" style="max-width: 730px;" allowfullscreen>
+</video>
 
 ## GitHub Advanced Security Examples
 
