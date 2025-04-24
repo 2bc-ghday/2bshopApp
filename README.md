@@ -11,7 +11,7 @@ examples for security vulnerability detection.
 The following videos demonstrate the capabilities of GitHub Copilot in generating code for the 2B Shops application.
 [**View all videos in streaming mode**](https://2bc-ghday.github.io/2bshopApp/) (via GitHub Pages)
 
-- [Github Copilot Workspace](https://2bc-ghday.github.io/2bshopApp/#workspace) - See how GitHub Copilot helps with workspace navigation
+- [Github Copilot Workspace](https://2bc-ghday.github.io/2bshopApp/#workspace) - See how GitHub Copilot Workspace helps with complete feature implementation
 - [GitHub Copilot Agent - Backend](https://2bc-ghday.github.io/2bshopApp/#backend) - Learn how Copilot can assist with backend code generation
 - [GitHub Copilot Agent - Frontend](https://2bc-ghday.github.io/2bshopApp/#frontend) - Watch Copilot build interactive frontend components
 - [Github Copilot MCP Example](https://2bc-ghday.github.io/2bshopApp/#mcp) - See the Model Context Protocol in action
