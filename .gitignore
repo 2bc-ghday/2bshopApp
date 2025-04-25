@@ -17,3 +17,5 @@ charts/*/Chart.lock
 
 # Ignore mac DS_Store files
 .DS_Store
+
+/temp
