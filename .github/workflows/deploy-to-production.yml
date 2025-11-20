@@ -31,7 +31,7 @@ jobs:
           echo "RELEASE_TAG=${RELEASE_TAG#v}" >> $GITHUB_ENV
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Helm
         uses: azure/setup-helm@v4
