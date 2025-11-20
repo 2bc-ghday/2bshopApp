@@ -30,7 +30,7 @@ jobs:
 
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       # Login to ACR
       - name: Login to ACR
         uses: azure/docker-login@v2
